@@ -1,20 +1,31 @@
+# Python
 venv/
 env/
 .venv/
-
 __pycache__/
 *.py[cod]
 *$py.class
 
+# Django
+db.sqlite3
+*.log
+media/cv_uploads/
 
+# Frontend
 frontend/node_modules/
 node_modules/
+frontend/dist/
+frontend/build/
 
+# Environment
 .env
 .env.local
 .env.*
 
-frontend/dist/
-frontend/build/
-dist/
-build/
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
