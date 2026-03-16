@@ -157,4 +157,4 @@ class ChatSessionSerializer(serializers.ModelSerializer):
         read_only_fields = ['user']
 
     def get_message_count(self, obj):
-        return len(obj.messages.count())
+        return obj.messages.count()
