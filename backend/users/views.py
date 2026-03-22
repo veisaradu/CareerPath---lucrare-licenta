@@ -1,4 +1,5 @@
 from rest_framework import viewsets, mixins, generics, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import get_user_model
@@ -21,18 +22,26 @@ class UserViewSet(viewsets.ModelViewSet):
         if self.request.user.is_staff:
             return (
                 User.objects.select_related('profile')
-                .prefetch_related(
-                    'skill_proficiencies__skill__category'
-                )
+                .prefetch_related('skill_proficiencies__skill__category')
                 .all()
             )
         return (
             User.objects.filter(pk=self.request.user.pk)
             .select_related('profile')
-            .prefetch_related(
-                'skill_proficiencies__skill__category'
-            )
+            .prefetch_related('skill_proficiencies__skill__category')
         )
+
+    @action(detail=False, methods=['get'], url_path='me')
+    def me(self, request):
+        UserProfile.objects.get_or_create(user=request.user)
+        user = (
+            User.objects.filter(pk=request.user.pk)
+            .select_related('profile')
+            .prefetch_related('skill_proficiencies__skill__category')
+            .first()
+        )
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)
 
 
 class UserProfileViewSet(
@@ -49,6 +58,19 @@ class UserProfileViewSet(
             .select_related('user')
             .prefetch_related('preferred_categories')
         )
+
+    @action(detail=False, methods=['get', 'patch'], url_path='me')
+    def me(self, request):
+        profile, _ = UserProfile.objects.get_or_create(user=request.user)
+        if request.method == 'PATCH':
+            serializer = self.get_serializer(
+                profile, data=request.data, partial=True
+            )
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+        serializer = self.get_serializer(profile)
+        return Response(serializer.data)
 
 
 class UserSkillProficiencyViewSet(viewsets.ModelViewSet):

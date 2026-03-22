@@ -21,7 +21,7 @@ frontend/build/
 .env
 .env.local
 .env.*
-
+ml-service/venv/
 # IDE
 .vscode/
 .idea/
