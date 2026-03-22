@@ -1,0 +1,118 @@
+{
+  "programming_languages": [
+    "Python", "JavaScript", "TypeScript", "Java", "C#", "C++", "C",
+    "Go", "Rust", "Ruby", "PHP", "Swift", "Kotlin", "Scala", "R",
+    "Dart", "Elixir", "Haskell", "Lua", "Perl", "MATLAB", "Groovy",
+    "Objective-C", "Assembly", "COBOL", "Fortran", "Julia", "Clojure",
+    "F#", "VBA", "Bash", "PowerShell", "Solidity", "VHDL", "Verilog"
+  ],
+  "web_frontend": [
+    "React", "Vue", "Angular", "HTML", "CSS", "Tailwind", "Bootstrap",
+    "Next.js", "Nuxt", "Svelte", "Redux", "GraphQL", "Sass", "Less",
+    "Webpack", "Vite", "Parcel", "Storybook", "jQuery", "Ember.js",
+    "Remix", "Astro", "SolidJS", "Alpine.js", "HTMX", "Web Components",
+    "PWA", "WebAssembly", "Three.js", "D3.js", "Chart.js", "Framer Motion",
+    "Material UI", "Chakra UI", "Ant Design", "Shadcn UI", "Radix UI"
+  ],
+  "web_backend": [
+    "Django", "FastAPI", "Flask", "Node.js", "Express", "Spring Boot",
+    "ASP.NET", "Laravel", "Rails", "NestJS", "Gin", "Echo", "Fiber",
+    "Actix", "Rocket", "Phoenix", "Hapi.js", "Koa.js", "Fastify",
+    "Strapi", "Directus", "Hasura", "tRPC", "gRPC", "REST API",
+    "GraphQL API", "WebSockets", "Microservices", "Serverless"
+  ],
+  "databases": [
+    "PostgreSQL", "MySQL", "SQLite", "MongoDB", "Redis", "Elasticsearch",
+    "Firebase", "Supabase", "Oracle", "SQL Server", "MariaDB", "Cassandra",
+    "DynamoDB", "CouchDB", "Neo4j", "InfluxDB", "TimescaleDB", "Clickhouse",
+    "Prisma", "SQLAlchemy", "Hibernate", "TypeORM", "Sequelize", "Mongoose",
+    "Drizzle", "PlanetScale", "Neon", "Turso", "RabbitMQ", "Kafka",
+    "Celery", "Vector Database", "Pinecone", "Weaviate", "Chroma"
+  ],
+  "devops_cloud": [
+    "Docker", "Kubernetes", "AWS", "GCP", "Azure", "CI/CD", "GitHub Actions",
+    "Jenkins", "Terraform", "Ansible", "Linux", "Nginx", "Apache",
+    "GitLab CI", "CircleCI", "Travis CI", "ArgoCD", "Helm", "Istio",
+    "Prometheus", "Grafana", "ELK Stack", "Datadog", "New Relic",
+    "Cloudflare", "Vercel", "Netlify", "Heroku", "Railway", "Render",
+    "AWS Lambda", "AWS EC2", "AWS S3", "AWS RDS", "GCP Cloud Run",
+    "Azure Functions", "Pulumi", "Chef", "Puppet", "Vagrant",
+    "Load Balancing", "CDN", "DNS", "SSL/TLS", "SSH", "VPN",
+    "Infrastructure as Code", "Site Reliability Engineering", "SRE"
+  ],
+  "data_ml": [
+    "Machine Learning", "Deep Learning", "TensorFlow", "PyTorch",
+    "scikit-learn", "pandas", "numpy", "Keras", "Computer Vision", "NLP",
+    "LLM", "Data Analysis", "Power BI", "Tableau", "OpenCV", "Hugging Face",
+    "LangChain", "RAG", "Fine-tuning", "Prompt Engineering", "spaCy",
+    "NLTK", "XGBoost", "LightGBM", "Random Forest", "Neural Networks",
+    "Reinforcement Learning", "Generative AI", "Stable Diffusion",
+    "Data Engineering", "Apache Spark", "Hadoop", "Airflow", "dbt",
+    "ETL", "Data Warehouse", "Data Lake", "Feature Engineering",
+    "Model Deployment", "MLflow", "Kubeflow", "Jupyter", "Google Colab",
+    "Matplotlib", "Seaborn", "Plotly", "Statistics", "Linear Algebra",
+    "A/B Testing", "Recommendation Systems", "Time Series Analysis",
+    "Anomaly Detection", "Object Detection", "Image Classification"
+  ],
+  "mobile": [
+    "React Native", "Flutter", "Android", "iOS", "SwiftUI", "Jetpack Compose",
+    "Expo", "Ionic", "Xamarin", "Cordova", "Capacitor", "Firebase Mobile",
+    "Push Notifications", "App Store", "Google Play", "Mobile UI/UX"
+  ],
+  "security": [
+    "Cybersecurity", "Penetration Testing", "Ethical Hacking", "OWASP",
+    "Cryptography", "Network Security", "Firewalls", "IDS/IPS",
+    "SIEM", "SOC", "Vulnerability Assessment", "Reverse Engineering",
+    "Malware Analysis", "Digital Forensics", "Zero Trust", "OAuth",
+    "JWT", "SAML", "SSO", "2FA", "MFA", "PKI", "TLS", "AES", "RSA",
+    "Burp Suite", "Metasploit", "Wireshark", "Nmap", "Kali Linux",
+    "GDPR", "ISO 27001", "NIST", "SOC 2", "Compliance"
+  ],
+  "tools": [
+    "Git", "GitHub", "GitLab", "Jira", "Figma", "Postman", "VS Code",
+    "IntelliJ", "Webpack", "Vite", "Slack", "Confluence", "Notion",
+    "Trello", "Asana", "Linear", "Bitbucket", "Azure DevOps",
+    "SonarQube", "Checkmarx", "Snyk", "Sentry", "PagerDuty",
+    "Insomnia", "Swagger", "OpenAPI", "Draw.io", "Miro", "Lucidchart",
+    "Chrome DevTools", "Lighthouse", "Selenium", "Cypress", "Playwright",
+    "Jest", "Vitest", "PyTest", "JUnit", "Mocha", "Testing Library",
+    "k6", "JMeter", "Locust", "Nx", "Turborepo", "pnpm", "yarn"
+  ],
+  "architecture_patterns": [
+    "REST", "GraphQL", "Microservices", "Monolith", "Event-Driven",
+    "CQRS", "Domain-Driven Design", "DDD", "Clean Architecture",
+    "Hexagonal Architecture", "MVC", "MVVM", "Repository Pattern",
+    "SOLID", "Design Patterns", "API Gateway", "Service Mesh",
+    "Message Queue", "Pub/Sub", "Cache Strategies", "CDN Strategy",
+    "Multi-tenancy", "Distributed Systems", "CAP Theorem"
+  ],
+  "soft_skills": [
+    "Agile", "Scrum", "Kanban", "Leadership", "Communication",
+    "Problem Solving", "Teamwork", "Time Management", "Critical Thinking",
+    "Adaptability", "Creativity", "Attention to Detail", "Self-motivated",
+    "Mentoring", "Code Review", "Technical Writing", "Documentation",
+    "Project Management", "Stakeholder Management", "Public Speaking",
+    "Negotiation", "Conflict Resolution", "Remote Work", "Cross-functional"
+  ],
+  "blockchain": [
+    "Blockchain", "Ethereum", "Solidity", "Web3.js", "Ethers.js",
+    "Smart Contracts", "NFT", "DeFi", "IPFS", "Hardhat", "Truffle",
+    "MetaMask", "Polygon", "Solana", "Rust for Solana"
+  ],
+  "game_dev": [
+    "Unity", "Unreal Engine", "Godot", "Game Design", "C# for Unity",
+    "OpenGL", "Vulkan", "DirectX", "WebGL", "Shader Programming",
+    "Physics Engines", "Multiplayer Networking"
+  ],
+  "embedded_iot": [
+    "Embedded Systems", "Arduino", "Raspberry Pi", "ESP32", "MQTT",
+    "IoT", "RTOS", "C for Embedded", "Firmware Development",
+    "I2C", "SPI", "UART", "CAN Bus", "Edge Computing"
+  ],
+  "design_ux": [
+    "UI/UX Design", "User Research", "Wireframing", "Prototyping",
+    "Figma", "Adobe XD", "Sketch", "InVision", "Zeplin",
+    "Accessibility", "WCAG", "Design Systems", "Typography",
+    "Color Theory", "Responsive Design", "Motion Design"
+  ]
+}
