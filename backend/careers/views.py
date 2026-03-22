@@ -1,5 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from django.utils import timezone
+from .ml_client import process_cv_with_ml
 from .models import (
     Category,
     Skill,
@@ -68,7 +70,22 @@ class CVViewSet(viewsets.ModelViewSet):
         )
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        CV.objects.filter(
+            user=self.request.user, is_active=True
+        ).update(is_active=False)
+
+        cv = serializer.save(user=self.request.user, is_active=True)
+
+        result = process_cv_with_ml(cv.file.path)
+        if result:
+            cv.extracted_text = result.get("extracted_text", "")
+            cv.extracted_skills_json = result.get("skills", [])
+            cv.extracted_experience_json = result.get("experience", [])
+            cv.extracted_education_json = result.get("education", [])
+            cv.is_processed = True
+            cv.processed_at = timezone.now()
+            cv.ml_model_version = "1.0"
+            cv.save()
 
 
 class RecommendationViewSet(viewsets.ModelViewSet):
