@@ -16,6 +16,9 @@ export default function Layout() {
         <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
           <strong style={{ fontSize: "1.2rem", color: "#646cff" }}>CareerPath</strong>
           <Link to="/dashboard">Dashboard</Link>
+          <Link to="/recommendations">Recomandări</Link>
+          <Link to="/chat">Chat</Link>
+          <Link to="/roadmap">Roadmaps</Link>
           <Link to="/jobs">Joburi</Link>
           <Link to="/profile">Profil</Link>
         </div>

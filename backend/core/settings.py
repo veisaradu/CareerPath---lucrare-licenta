@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+
+from dotenv import load_dotenv
+load_dotenv()
+
 import os
 from datetime import timedelta
 
@@ -23,8 +27,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!)3fcyab^^m1-jx(mxyxz+g11eh74z6jmnut8l*3u14-xrec3a'
-FRONTEND_URL = "http://localhost:5173"
+SECRET_KEY = os.environ.get("SECRET_KEY")
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:5173")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -105,11 +109,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'careerpath',
-        'USER': 'careerpath_user',
-        'PASSWORD': 'careerpath_pass',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'NAME': os.environ.get('DB_NAME', 'careerpath'),
+        'USER': os.environ.get('DB_USER', 'careerpath_user'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'careerpath_pass'),
+        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 
@@ -150,3 +154,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 AUTH_USER_MODEL = 'users.CustomUser'
+
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+GROQ_MODEL = "llama-3.3-70b-versatile"
+ML_SERVICE_URL = os.environ.get("ML_SERVICE_URL", "http://127.0.0.1:8001")
+

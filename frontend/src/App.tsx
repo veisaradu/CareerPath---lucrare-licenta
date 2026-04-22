@@ -7,6 +7,9 @@ import JobsPage from "./pages/JobsPage";
 import JobDetailPage from "./pages/JobDetailPage";
 import Layout from "./components/Layout";
 import ProfilePage from "./pages/ProfilePage";
+import RecommendationsPage from "./pages/RecommendationsPage";
+import RoadmapPage from "./pages/RoadmapPage";
+import ChatPage from "./pages/ChatPage";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
@@ -34,22 +37,14 @@ export default function App() {
             <Route path="jobs" element={<JobsPage />} />
             <Route path="jobs/:id" element={<JobDetailPage />} />
             <Route path="profile" element={<ProfilePage />} />
-            <Route path="recommendations" element={<PlaceholderPage title="Recomandări" />} />
-            <Route path="roadmap" element={<PlaceholderPage title="Roadmap" />} />
-            <Route path="chat" element={<PlaceholderPage title="Chat" />} />
+            <Route path="recommendations" element={<RecommendationsPage />} />
+            <Route path="roadmap" element={<RoadmapPage />} />
+            <Route path="chat" element={<ChatPage />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
-  );
-}
-function PlaceholderPage({ title }: { title: string }) {
-  return (
-    <div>
-      <h1>{title}</h1>
-      <p style={{ color: "#aaa" }}>Coming soon...</p>
-    </div>
   );
 }

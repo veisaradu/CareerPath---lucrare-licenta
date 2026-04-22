@@ -4,3 +4,4 @@ pdfminer.six
 python-docx
 python-multipart
 requests
+groq==0.25.0
