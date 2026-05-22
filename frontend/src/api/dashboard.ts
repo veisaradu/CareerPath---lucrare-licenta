@@ -1,4 +1,3 @@
-// src/api/dashboard.ts
 import API from "./auth";
 
 export interface DashboardStats {

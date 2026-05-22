@@ -32,15 +32,15 @@ class UserProfile(models.Model):
 
 class UserSkillProficiency(models.Model):
     class Level(models.TextChoices):
-        BEGINNER = 'beginner', 'Începător'
-        INTERMEDIATE = 'intermediate', 'Intermediar'
-        ADVANCED = 'advanced', 'Avansat'
+        BEGINNER = 'beginner', 'Beginner'
+        INTERMEDIATE = 'intermediate', 'Intermediate'
+        ADVANCED = 'advanced', 'Advanced'
         EXPERT = 'expert', 'Expert'
 
     class Source(models.TextChoices):
-        MANUAL = 'manual', 'Adăugat manual'
-        CV = 'cv', 'Extras din CV'
-        AI = 'ai', 'Sugerat de AI'
+        MANUAL = 'manual', 'Added manually'
+        CV = 'cv', 'Extracted from CV'
+        AI = 'ai', 'Suggested by AI'
 
     user = models.ForeignKey(
         CustomUser,
@@ -65,6 +65,7 @@ class UserSkillProficiency(models.Model):
     years_experience = models.FloatField(default=0)
 
     class Meta:
+        ordering = ['skill__name']
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'skill'],

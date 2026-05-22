@@ -32,26 +32,26 @@ def generate_roadmap(user, recommendation: Recommendation) -> Roadmap | None:
 
 def _get_steps(recommendation: Recommendation, gap: list) -> list:
     prompt = f"""
-Job tinta: {recommendation.job.title}
-Skilluri pe care candidatul trebuie sa le invete: {", ".join(gap)}
+Target job: {recommendation.job.title}
+Skills the candidate needs to learn: {", ".join(gap)}
 
-Genereaza un plan de invatare structurat. Returnează DOAR JSON valid,
-fara text suplimentar, fara markdown, fără ```, doar array-ul JSON:
+Generate a structured learning plan. Return ONLY valid JSON,
+no extra text, no markdown, no ```, just the JSON array:
 [
   {{
     "order": 1,
-    "skill": "NumeSkill",
-    "action": "Ce trebuie sa faca concret",
+    "skill": "SkillName",
+    "action": "Concrete action the candidate should take",
     "resource_url": "https://...",
     "estimated_hours": 20,
     "priority": "high"
   }}
 ]
-Reguli:
-- priority poate fi doar: high, medium, low
-- maxim 8 pasi
-- resource_url sa fie un link real si relevant
-- estimated_hours sa fie realist
+Rules:
+- priority must be one of: high, medium, low
+- maximum 8 steps
+- resource_url must be a real and relevant link
+- estimated_hours must be realistic
 """
     try:
         raw = call_groq([{"role": "user", "content": prompt}], temperature=0.2)
@@ -67,7 +67,7 @@ Reguli:
             {
                 "order": i + 1,
                 "skill": skill,
-                "action": f"Invata {skill} prin cursuri online",
+                "action": f"Learn {skill} through online courses and practice projects",
                 "resource_url": f"https://www.google.com/search?q={skill}+tutorial",
                 "estimated_hours": 10,
                 "priority": "high",

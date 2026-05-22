@@ -88,6 +88,17 @@ export const addSkill = async (payload: {
   return data;
 };
 
+export const updateSkill = async (
+  id: number,
+  payload: { level: UserSkillProficiency["level"]; years_experience: number }
+): Promise<UserSkillProficiency> => {
+  const { data } = await API.patch<UserSkillProficiency>(
+    `/users/skill-proficiencies/${id}/`,
+    payload
+  );
+  return data;
+};
+
 export const deleteSkill = async (id: number): Promise<void> => {
   await API.delete(`/users/skill-proficiencies/${id}/`);
 };

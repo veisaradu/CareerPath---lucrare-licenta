@@ -16,19 +16,18 @@ export default function Layout() {
         <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
           <strong style={{ fontSize: "1.2rem", color: "#646cff" }}>CareerPath</strong>
           <Link to="/dashboard">Dashboard</Link>
-          <Link to="/recommendations">Recomandări</Link>
+          <Link to="/recommendations">Recommendations</Link>
           <Link to="/chat">Chat</Link>
           <Link to="/roadmap">Roadmaps</Link>
-          <Link to="/jobs">Joburi</Link>
-          <Link to="/profile">Profil</Link>
+          <Link to="/jobs">Jobs</Link>
+          <Link to="/profile">Profile</Link>
         </div>
         <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-          <span>Salut, {username}!</span>
+          <span>Hello, {username}!</span>
           <button onClick={handleLogout} style={{ padding: "0.4em 0.8em" }}>Logout</button>
         </div>
       </nav>
       
-      {/* Aici se vor randa restul paginilor (Dashboard, Jobs etc.) */}
       <main style={{ padding: "2rem", maxWidth: "1280px", margin: "0 auto" }}>
         <Outlet />
       </main>

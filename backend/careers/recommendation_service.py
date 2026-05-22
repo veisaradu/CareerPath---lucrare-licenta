@@ -1,6 +1,7 @@
 import logging
 from .models import CV, Job, Recommendation
 from .ai_service import call_groq
+from users.models import UserSkillProficiency
 
 logger = logging.getLogger(__name__)
 
@@ -17,16 +18,20 @@ def generate_recommendations(user) -> list:
     cv = CV.objects.filter(
         user=user, is_active=True, is_processed=True
     ).first()
-    if not cv:
-        logger.warning("No active processed CV for user %s", user)
-        return []
 
     cv_skills = {
         s["name"].lower()
         for s in (cv.extracted_skills_json or [])
+    } if cv else set()
+
+    manual_skills = {
+        usp.skill.name.lower()
+        for usp in UserSkillProficiency.objects.filter(user=user).select_related("skill")
     }
-    if not cv_skills:
-        logger.warning("No skills extracted for user %s", user)
+
+    all_skills = cv_skills | manual_skills
+    if not all_skills:
+        logger.warning("No skills found for user %s", user)
         return []
 
     jobs = Job.objects.filter(is_active=True).prefetch_related(
@@ -41,9 +46,9 @@ def generate_recommendations(user) -> list:
         if not required_raw:
             continue
 
-        matched_req = [s.name for s in required_raw if _skills_match(cv_skills, s.name)]
-        matched_pref = [s.name for s in preferred_raw if _skills_match(cv_skills, s.name)]
-        gap = [s.name for s in required_raw if not _skills_match(cv_skills, s.name)]
+        matched_req = [s.name for s in required_raw if _skills_match(all_skills, s.name)]
+        matched_pref = [s.name for s in preferred_raw if _skills_match(all_skills, s.name)]
+        gap = [s.name for s in required_raw if not _skills_match(all_skills, s.name)]
 
         matched = matched_req + matched_pref
         score = round((len(matched_req) / len(required_raw)) * 100, 1) if required_raw else 0
@@ -56,8 +61,8 @@ def generate_recommendations(user) -> list:
         rec, _ = Recommendation.objects.update_or_create(
             user=user,
             job=job,
-            cv=cv,
             defaults={
+                "cv": cv,
                 "match_score": score,
                 "matched_skills_json": matched,
                 "skill_gap_json": gap,
@@ -71,19 +76,19 @@ def generate_recommendations(user) -> list:
 
 def _get_explanation(job, matched: list, gap: list, score: float) -> str:
     prompt = f"""
-Job: {job.title} la {job.company_name or "o companie"}
-Scor potrivire: {score}%
-Skilluri potrivite: {", ".join(matched) or "niciunul"}
-Skilluri lipsa: {", ".join(gap) or "niciunul"}
+Job: {job.title} at {job.company_name or "a company"}
+Match score: {score}%
+Matched skills: {", ".join(matched) or "none"}
+Missing skills: {", ".join(gap) or "none"}
 
-Scrie o explicatie scurta (2-3 propozitii) in romana de ce acest job
-este sau nu potrivit pentru candidat. Fii direct si concis.
+Write a short explanation (2-3 sentences) in English of why this job
+is or is not a good fit for the candidate. Be direct and concise.
 """
     try:
         return call_groq([{"role": "user", "content": prompt}])
     except Exception as e:
         logger.error("Groq explanation failed: %s", e)
         return (
-            f"Scor de potrivire: {score}%. "
-            f"Skilluri lipsa: {', '.join(gap) or 'niciunul'}."
+            f"Match score: {score}%. "
+            f"Missing skills: {', '.join(gap) or 'none'}."
         )

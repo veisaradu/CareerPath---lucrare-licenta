@@ -30,6 +30,7 @@ export interface Roadmap {
   };
   recommendation: number;
   steps_json: RoadmapStep[];
+  completed_steps: number[];
   estimated_total_hours: number;
   is_active: boolean;
   created_at: string;
@@ -45,11 +46,18 @@ export interface RoadmapStep {
   priority: "high" | "medium" | "low";
 }
 
-export const getRecommendations = async (): Promise<Recommendation[]> => {
-  const { data } = await API.get<
-    { results: Recommendation[] } | Recommendation[]
-  >("/recommendations/");
-  return Array.isArray(data) ? data : data.results;
+export interface PaginatedResponse<T> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+}
+
+export const getRecommendations = async (page = 1): Promise<PaginatedResponse<Recommendation>> => {
+  const { data } = await API.get<PaginatedResponse<Recommendation>>(
+    `/recommendations/?page=${page}`
+  );
+  return data;
 };
 
 export const generateRoadmap = async (

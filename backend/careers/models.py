@@ -75,6 +75,9 @@ class Job(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-created_at']
+
     def __str__(self):
         return self.title
 
@@ -92,7 +95,7 @@ class CV(models.Model):
     extracted_experience_json = models.JSONField(
         null=True,
         blank=True,
-        help_text='[{"role": "...", "company": "...", "duration": "..."}]',
+        help_text='[{"role": "...", "company": "...", "duration": "..."}]', 
     )
     extracted_education_json = models.JSONField(
         null=True,
@@ -103,12 +106,12 @@ class CV(models.Model):
     ml_model_version = models.CharField(max_length=50, blank=True)
     is_active = models.BooleanField(
         default=True,
-        help_text='Doar un CV activ per utilizator',
+        help_text='Only one active CV per user',
     )
 
     class Meta:
         verbose_name = 'CV'
-        verbose_name_plural = 'CV-uri'
+        verbose_name_plural = 'CVs'
         ordering = ['-uploaded_at']
         constraints = [
             models.UniqueConstraint(
@@ -134,22 +137,22 @@ class Recommendation(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        help_text='CV-ul pe baza căruia s-a generat recomandarea',
+        help_text='The CV on which this recommendation is based',
     )
     match_score = models.FloatField(
         validators=[MinValueValidator(0), MaxValueValidator(100)]
     )
     matched_skills_json = models.JSONField(
         default=list,
-        help_text='Skilluri pe care utilizatorul le are și sunt cerute',
+        help_text='Skills the user has that are required for this job',
     )
     skill_gap_json = models.JSONField(
         default=list,
-        help_text='Skilluri cerute pe care utilizatorul nu le are',
+        help_text='Required skills the user does not have',
     )
     explanation = models.TextField(
         blank=True,
-        help_text='Explicație AI de ce acest job este recomandat',
+        help_text='AI explanation of why this job is recommended',
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -183,14 +186,13 @@ class Roadmap(models.Model):
     )
     steps_json = models.JSONField(
         default=list,
-        help_text='''[{
-            "order": 1,
-            "skill": "Docker",
-            "action": "Completează cursul X",
-            "resource_url": "https://...",
-            "estimated_hours": 20,
-            "priority": "high"
-        }]''',
+        help_text='[{"order": 1, "skill": "Docker", "action": "...", '
+                  '"resource_url": "https://...", "estimated_hours": 20, "priority": "high"}]',
+    )
+    completed_steps = models.JSONField(
+        default=list,
+        blank=True,
+        help_text='List of step "order" values marked as completed',
     )
     estimated_total_hours = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
@@ -198,6 +200,7 @@ class Roadmap(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['-created_at']
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'target_job'],
@@ -221,7 +224,7 @@ class ChatSession(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        help_text='Dacă discuția e despre un job specific',
+        help_text='If the discussion is about a specific job',
     )
     related_recommendation = models.ForeignKey(
         'Recommendation',
@@ -232,18 +235,21 @@ class ChatSession(models.Model):
     topic = models.CharField(
         max_length=200,
         blank=True,
-        help_text='Subiect generat automat din prima întrebare',
+        help_text='Topic auto-generated from the first message',
     )
     started_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
 
+    class Meta:
+        ordering = ['-started_at']
+
     def __str__(self):
-        return f'Sesiune #{self.pk} - {self.user.username}'
+        return f'Session #{self.pk} - {self.user.username}'
 
 
 class ChatMessage(models.Model):
     class Sender(models.TextChoices):
-        USER = 'user', 'Utilizator'
+        USER = 'user', 'User'
         AI = 'ai', 'Chatbot AI'
 
     session = models.ForeignKey(
@@ -271,8 +277,8 @@ class SystemConfiguration(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = 'Configurare Sistem'
-        verbose_name_plural = 'Configurări Sistem'
+        verbose_name = 'System Configuration'
+        verbose_name_plural = 'System Configurations'
 
     def __str__(self):
         return f'Config ({self.updated_at:%Y-%m-%d})'

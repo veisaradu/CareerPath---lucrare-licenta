@@ -29,21 +29,19 @@ export default function JobDetailPage() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <p>Se încarcă...</p>;
+  if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   if (!job) return null;
 
   return (
     <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-      {/* Back */}
       <Link
         to="/jobs"
         style={{ fontSize: "0.9rem", display: "inline-block", marginBottom: "1.5rem" }}
       >
-        ← Înapoi la joburi
+        Back to Jobs
       </Link>
 
-      {/* Header */}
       <div
         style={{
           border: "1px solid #444",
@@ -54,12 +52,12 @@ export default function JobDetailPage() {
       >
         <h1 style={{ margin: "0 0 0.5rem" }}>{job.title}</h1>
         <p style={{ color: "#aaa", margin: "0 0 1.5rem", fontSize: "1rem" }}>
-           {job.company_name || "Companie Confidențială"}
+           {job.company_name || "Confidential Company"}
         </p>
 
         <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
           <span className="badge">
-            {job.category_detail?.name ?? "Fără categorie"}
+            {job.category_detail?.name ?? "No category"}
           </span>
           <span className="badge">
             {JOB_TYPE_LABELS[job.job_type] ?? job.job_type}
@@ -73,16 +71,14 @@ export default function JobDetailPage() {
         </div>
       </div>
 
-      {/* Descriere */}
-      <Section title="Descriere">
+      <Section title="Description">
         <p style={{ lineHeight: 1.7, whiteSpace: "pre-wrap" }}>
           {job.description}
         </p>
       </Section>
 
-      {/* Skilluri obligatorii */}
       {job.required_skills.length > 0 && (
-        <Section title="Skilluri obligatorii">
+        <Section title="Required Skills">
           <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
             {job.required_skills.map((skill) => (
               <span
@@ -97,9 +93,8 @@ export default function JobDetailPage() {
         </Section>
       )}
 
-      {/* Skilluri preferate */}
       {job.preferred_skills.length > 0 && (
-        <Section title="Skilluri preferate">
+        <Section title="Preferred Skills">
           <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
             {job.preferred_skills.map((skill) => (
               <span

@@ -48,3 +48,7 @@ export const sendMessage = async (
   );
   return data;
 };
+
+export const deleteSession = async (id: number): Promise<void> => {
+  await API.delete(`/chats/${id}/`);
+};
