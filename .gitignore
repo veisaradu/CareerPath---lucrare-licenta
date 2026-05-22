@@ -29,3 +29,5 @@ ml-service/venv/
 # OS
 .DS_Store
 Thumbs.db
+
+backend/media/

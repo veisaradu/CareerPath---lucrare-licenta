@@ -124,6 +124,7 @@ class RoadmapSerializer(serializers.ModelSerializer):
         read_only_fields = [
             'user',
             'steps_json',
+            'completed_steps',
             'estimated_total_hours',
             'created_at',
             'updated_at',
@@ -140,6 +141,7 @@ class ChatMessageSerializer(serializers.ModelSerializer):
 class ChatSessionSerializer(serializers.ModelSerializer):
     messages = ChatMessageSerializer(many=True, read_only=True)
     message_count = serializers.SerializerMethodField()
+    created_at = serializers.DateTimeField(source='started_at', read_only=True)
 
     class Meta:
         model = ChatSession
@@ -149,7 +151,7 @@ class ChatSessionSerializer(serializers.ModelSerializer):
             'related_job',
             'related_recommendation',
             'topic',
-            'started_at',
+            'created_at',
             'is_active',
             'messages',
             'message_count',

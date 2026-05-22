@@ -3,4 +3,3 @@ uvicorn
 pdfminer.six
 python-docx
 python-multipart
-requests

@@ -69,6 +69,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+
+    username = serializers.CharField(max_length=150, validators=[])
     password = serializers.CharField(write_only=True, min_length=8)
     password2 = serializers.CharField(
         write_only=True, label='Confirm password'
@@ -85,10 +87,17 @@ class RegisterSerializer(serializers.ModelSerializer):
             'last_name',
         ]
 
-    def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
+    def validate_username(self, value):
+        if User.objects.filter(username__iexact=value).exists():
             raise serializers.ValidationError(
-                'A user with this email already exists.'
+                'Unable to register with the provided information.'
+            )
+        return value
+
+    def validate_email(self, value):
+        if User.objects.filter(email__iexact=value).exists():
+            raise serializers.ValidationError(
+                'Unable to register with the provided information.'
             )
         return value
 

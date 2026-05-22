@@ -1,7 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
     TokenRefreshView,
     TokenVerifyView,
 )
@@ -10,6 +9,7 @@ from .views import (
     UserProfileViewSet,
     UserSkillProficiencyViewSet,
     RegisterView,
+    ThrottledTokenObtainPairView,
 )
 
 router = DefaultRouter()
@@ -28,7 +28,7 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path(
         'token/',
-        TokenObtainPairView.as_view(),
+        ThrottledTokenObtainPairView.as_view(),
         name='token_obtain',
     ),
     path(
