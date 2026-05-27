@@ -23,8 +23,11 @@ export const getSessions = async (): Promise<ChatSession[]> => {
   return Array.isArray(data) ? data : data.results;
 };
 
-export const createSession = async (): Promise<ChatSession> => {
-  const { data } = await API.post<ChatSession>("/chats/", {});
+export const createSession = async (params?: {
+  related_job?: number;
+  related_recommendation?: number;
+}): Promise<ChatSession> => {
+  const { data } = await API.post<ChatSession>("/chats/", params ?? {});
   return data;
 };
 

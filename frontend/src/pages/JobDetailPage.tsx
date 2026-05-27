@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { getJobDetail, type JobDetail } from "../api/jobs";
 
 const JOB_TYPE_LABELS: Record<string, string> = {
@@ -17,6 +17,7 @@ const LEVEL_LABELS: Record<string, string> = {
 
 export default function JobDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [job, setJob] = useState<JobDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -68,6 +69,15 @@ export default function JobDetailPage() {
           <span className="badge">
             {job.is_remote ? " Remote" : ` ${job.location || "On-site"}`}
           </span>
+        </div>
+
+        <div style={{ marginTop: "1.25rem" }}>
+          <button
+            onClick={() => navigate(`/chat?job=${job.id}`)}
+            style={{ background: "#1a1a1a", color: "#646cff", border: "1px solid #646cff", borderRadius: "6px", padding: "0.45rem 1rem", cursor: "pointer", fontSize: "0.85rem", fontWeight: 500 }}
+          >
+            Chat about this job
+          </button>
         </div>
       </div>
 

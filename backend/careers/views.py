@@ -241,7 +241,11 @@ class ChatSessionViewSet(viewsets.ModelViewSet):
         )
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        related_job = serializer.validated_data.get('related_job')
+        kwargs = {'user': self.request.user}
+        if related_job:
+            kwargs['topic'] = f"About: {related_job.title}"
+        serializer.save(**kwargs)
 
     @action(detail=True, methods=['post'], url_path='send')
     def send_message(self, request, pk=None):
@@ -260,24 +264,40 @@ class ChatSessionViewSet(viewsets.ModelViewSet):
             message=user_text,
         )
 
-        history = session.messages.order_by('timestamp')
-        messages = [
-            {
-                'role': 'system',
-                'content': (
-                    'You are a career assistant on the CareerPath platform. '
-                    'Help users with advice about jobs, skills, and professional development. '
-                    'Respond in the same language the user writes in. '
-                    'Be concise and practical.'
-                ),
-            }
-        ]
-        for msg in history:
-            role = (
-                'user'
-                if msg.sender == ChatMessage.Sender.USER
-                else 'assistant'
+        system_content = (
+            'You are a career assistant on the CareerPath platform. '
+            'Help users with advice about jobs, skills, and professional development. '
+            'Respond in the same language the user writes in. '
+            'Be concise and practical.'
+        )
+
+        if session.related_job:
+            job = session.related_job
+            required = list(job.required_skills.values_list('name', flat=True))
+            preferred = list(job.preferred_skills.values_list('name', flat=True))
+            system_content += (
+                f'\n\nThe user is asking about a specific job posting.'
+                f'\nJob: {job.title}'
+                f'\nCompany: {job.company_name or "Confidential"}'
+                f'\nExperience level: {job.get_experience_level_display()}'
+                f'\nLocation: {"Remote" if job.is_remote else job.location or "On-site"}'
+                f'\nRequired skills: {", ".join(required) or "not specified"}'
+                f'\nPreferred skills: {", ".join(preferred) or "none"}'
             )
+
+        if session.related_recommendation:
+            rec = session.related_recommendation
+            system_content += (
+                f'\n\nThe candidate\'s match score for this job is {rec.match_score}%.'
+                f'\nMatched skills: {", ".join(rec.matched_skills_json or []) or "none"}'
+                f'\nSkill gaps: {", ".join(rec.skill_gap_json or []) or "none"}'
+                f'\nAI explanation: {rec.explanation or ""}'
+            )
+
+        history = session.messages.order_by('timestamp')
+        messages = [{'role': 'system', 'content': system_content}]
+        for msg in history:
+            role = 'user' if msg.sender == ChatMessage.Sender.USER else 'assistant'
             messages.append({'role': role, 'content': msg.message})
 
         try:
