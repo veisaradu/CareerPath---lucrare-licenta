@@ -150,6 +150,7 @@ export default function RecommendationsPage() {
               rec={rec}
               generating={generating === rec.id}
               onGenerateRoadmap={() => handleGenerateRoadmap(rec)}
+              onChat={() => navigate(`/chat?rec=${rec.id}`)}
             />
           ))}
         </div>
@@ -178,7 +179,7 @@ export default function RecommendationsPage() {
   );
 }
 
-function RecCard({ rec, generating, onGenerateRoadmap }: { rec: Recommendation; generating: boolean; onGenerateRoadmap: () => void }) {
+function RecCard({ rec, generating, onGenerateRoadmap, onChat }: { rec: Recommendation; generating: boolean; onGenerateRoadmap: () => void; onChat: () => void }) {
   const [expanded, setExpanded] = useState(false);
   const score = rec.match_score;
   const scoreColor = score >= 75 ? "#88cc88" : score >= 50 ? "#ffaa55" : "#ff6b6b";
@@ -238,13 +239,19 @@ function RecCard({ rec, generating, onGenerateRoadmap }: { rec: Recommendation; 
         </div>
       )}
 
-      <div style={{ marginTop: "1.25rem" }}>
+      <div style={{ marginTop: "1.25rem", display: "flex", gap: "0.75rem" }}>
         <button
           onClick={onGenerateRoadmap}
           disabled={generating}
           style={{ backgroundColor: generating ? "#2a2a2a" : "#646cff", color: generating ? "#555" : "#fff", border: "none", borderRadius: "6px", padding: "0.5rem 1.1rem", cursor: generating ? "not-allowed" : "pointer", fontSize: "0.88rem", fontWeight: 500 }}
         >
           {generating ? "Generating..." : "Generate Roadmap"}
+        </button>
+        <button
+          onClick={onChat}
+          style={{ background: "#1a1a1a", color: "#646cff", border: "1px solid #646cff", borderRadius: "6px", padding: "0.5rem 1.1rem", cursor: "pointer", fontSize: "0.88rem", fontWeight: 500 }}
+        >
+          Ask AI
         </button>
       </div>
     </div>

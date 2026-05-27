@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   getSessions,
   createSession,
@@ -18,14 +19,26 @@ export default function ChatPage() {
   const [loadingSessions, setLoadingSessions] = useState(true);
   const [loadingMessages, setLoadingMessages] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    getSessions()
-      .then((data) => {
-        setSessions(data);
-        if (data.length > 0) selectSession(data[data.length - 1]);
-      })
-      .finally(() => setLoadingSessions(false));
+    const jobId = searchParams.get("job");
+    const recId = searchParams.get("rec");
+
+    getSessions().then(async (data) => {
+      setSessions(data);
+      if (jobId || recId) {
+        const params: { related_job?: number; related_recommendation?: number } = {};
+        if (jobId) params.related_job = Number(jobId);
+        if (recId) params.related_recommendation = Number(recId);
+        const session = await createSession(params);
+        setSessions((prev) => [...prev, session]);
+        await selectSession(session);
+        setSearchParams({}, { replace: true });
+      } else if (data.length > 0) {
+        selectSession(data[data.length - 1]);
+      }
+    }).finally(() => setLoadingSessions(false));
   }, []);
 
   useEffect(() => {
