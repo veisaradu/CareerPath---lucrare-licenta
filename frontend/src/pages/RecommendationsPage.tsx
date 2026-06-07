@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
   getRecommendations,
   generateRoadmap,
@@ -38,6 +39,7 @@ export default function RecommendationsPage() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState<number | null>(null);
+  const [roadmapError, setRoadmapError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   function fetchPage(p: number) {
@@ -57,9 +59,19 @@ export default function RecommendationsPage() {
 
   const handleGenerateRoadmap = async (rec: Recommendation) => {
     setGenerating(rec.id);
+    setRoadmapError(null);
     try {
       await generateRoadmap(rec.id);
       navigate("/roadmap");
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.status === 400) {
+        setRoadmapError(
+          err.response.data?.error ??
+            "You already have all the required skills for this job — no learning plan needed."
+        );
+      } else {
+        setRoadmapError("Failed to generate roadmap. Please try again.");
+      }
     } finally {
       setGenerating(null);
     }
@@ -136,6 +148,18 @@ export default function RecommendationsPage() {
       <p style={{ color: "#666", marginBottom: "2rem" }}>
         {totalCount} jobs matching your profile
       </p>
+
+      {roadmapError && (
+        <div style={{ border: "1px solid #4a3a1a", background: "#2e2410", color: "#ffaa55", borderRadius: "8px", padding: "0.85rem 1.1rem", marginBottom: "1.5rem", fontSize: "0.88rem", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem" }}>
+          <span>{roadmapError}</span>
+          <button
+            onClick={() => setRoadmapError(null)}
+            style={{ background: "none", border: "none", color: "#ffaa55", cursor: "pointer", fontSize: "1rem", lineHeight: 1, padding: 0 }}
+          >
+            ×
+          </button>
+        </div>
+      )}
 
       {recs.length === 0 ? (
         <div style={{ border: "1px solid #2a2a2a", borderRadius: "8px", padding: "3rem", textAlign: "center", color: "#666" }}>
