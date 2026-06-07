@@ -21,6 +21,9 @@ export const getDashboardStats = async (): Promise<DashboardStats> => {
   const recList = Array.isArray(recommendations)
     ? recommendations
     : recommendations.results ?? [];
+  const recommendationsCount = Array.isArray(recommendations)
+    ? recommendations.length
+    : recommendations.count ?? recommendations.results?.length ?? 0;
   const skillList = Array.isArray(skills) ? skills : skills.results ?? [];
   const roadmapList = Array.isArray(roadmaps)
     ? roadmaps
@@ -39,7 +42,7 @@ export const getDashboardStats = async (): Promise<DashboardStats> => {
   return {
     cv_status,
     cv_id: activeCV?.id ?? null,
-    recommendations_count: recList.length,
+    recommendations_count: recommendationsCount,
     top_match_score: scores.length ? Math.max(...scores) : null,
     skills_count: skillList.length,
     active_roadmaps_count: roadmapList.filter(

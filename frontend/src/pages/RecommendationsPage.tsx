@@ -134,7 +134,7 @@ export default function RecommendationsPage() {
         )}
       </div>
       <p style={{ color: "#666", marginBottom: "2rem" }}>
-        {recs.length} jobs matching your profile
+        {totalCount} jobs matching your profile
       </p>
 
       {recs.length === 0 ? (

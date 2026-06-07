@@ -160,8 +160,8 @@ class Recommendation(models.Model):
         ordering = ['-match_score']
         constraints = [
             models.UniqueConstraint(
-                fields=['user', 'job', 'cv'],
-                name='unique_recommendation_per_cv',
+                fields=['user', 'job'],
+                name='unique_recommendation_per_job',
             )
         ]
 
