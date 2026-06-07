@@ -154,6 +154,9 @@ def generate_recommendations(user) -> list:
         )
         results.append(rec)
 
+    kept_job_ids = [r.job_id for r in results]
+    Recommendation.objects.filter(user=user).exclude(job_id__in=kept_job_ids).delete()
+
     return sorted(results, key=lambda r: r.match_score, reverse=True)
 
 
